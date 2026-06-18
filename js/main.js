@@ -53,8 +53,38 @@ document.addEventListener('DOMContentLoaded', () => {
       nav.classList.toggle('is-open');
     });
 
+    function getScrollOffset() {
+      const anchor = document.getElementById('servicios') || document.getElementById('inicio');
+      if (!anchor) return 72;
+      return parseFloat(getComputedStyle(anchor).scrollMarginTop) || 72;
+    }
+
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const top = el.getBoundingClientRect().top + window.scrollY - getScrollOffset();
+      window.scrollTo({ top: Math.max(0, top), behavior: 'auto' });
+      history.pushState(null, '', `#${id}`);
+    }
+
+    function isMobileNav() {
+      return window.matchMedia('(max-width: 768px)').matches;
+    }
+
     navLinks.forEach(link => {
-      link.addEventListener('click', () => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+
+        if (isMobileNav() && href?.startsWith('#')) {
+          e.preventDefault();
+          const id = href.slice(1);
+          toggle.classList.remove('is-open');
+          nav.classList.remove('is-open');
+          setActiveNav(id);
+          scrollToSection(id);
+          return;
+        }
+
         pulseElement(link);
         flashNavSelection(link);
         toggle.classList.remove('is-open');

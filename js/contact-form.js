@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const WHATSAPP_NUMBER = '573053300303';
   const submitBtn = form.querySelector('.contact-form__submit');
+  const t = (key) => window.RudoI18n?.t(key) ?? key;
 
   const fields = {
     nombre: form.querySelector('#contact-nombre'),
@@ -15,10 +16,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let isExpanded = false;
 
+  function updateSubmitLabel() {
+    if (!submitBtn) return;
+    submitBtn.textContent = t(isExpanded ? 'contact.submitWhatsApp' : 'contact.continue');
+  }
+
   function validateName() {
     const name = fields.nombre.value.trim();
     if (name.length < 2) {
-      fields.nombre.setCustomValidity('Escribe al menos 2 caracteres.');
+      fields.nombre.setCustomValidity(t('contact.nameError'));
       fields.nombre.reportValidity();
       fields.nombre.setCustomValidity('');
       return false;
@@ -52,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (submitBtn) {
-      submitBtn.textContent = 'Enviar por WhatsApp';
+      updateSubmitLabel();
       submitBtn.classList.remove('is-expanding');
       void submitBtn.offsetWidth;
       submitBtn.classList.add('is-expanding');
@@ -63,14 +69,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function buildWhatsAppMessage() {
     return [
-      '¡Hola Rudo Estudio! Quiero conocer más sobre sus servicios.',
+      t('contact.whatsappIntro'),
       '',
-      `*Nombre:* ${fields.nombre.value.trim()}`,
-      `*Email:* ${fields.email.value.trim()}`,
-      `*Teléfono / WhatsApp:* ${fields.telefono.value.trim()}`,
-      `*Servicio de interés:* ${fields.servicio.value}`,
+      `*${t('contact.whatsappName')}:* ${fields.nombre.value.trim()}`,
+      `*${t('contact.whatsappEmail')}:* ${fields.email.value.trim()}`,
+      `*${t('contact.whatsappPhone')}:* ${fields.telefono.value.trim()}`,
+      `*${t('contact.whatsappService')}:* ${fields.servicio.value}`,
       '',
-      '*Sobre mi proyecto:*',
+      `*${t('contact.whatsappProject')}:*`,
       fields.proyecto.value.trim(),
     ].join('\n');
   }
@@ -92,4 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!validateRest()) return;
     sendToWhatsApp();
   });
+
+  window.addEventListener('rudo:langchange', updateSubmitLabel);
 });

@@ -18,41 +18,20 @@ document.addEventListener('DOMContentLoaded', () => {
     'tag--animacion':   { x: -185, y: 115,  rot: -4,  z: 3 },
     'tag--branding':    { x: -15,  y: 95,   rot: 8,   z: 6 },
     'tag--estrategia':  { x: 175,  y: 120,  rot: 6,   z: 4 },
+    'tag--packaging':   { x: 130,  y: -90,  rot: -5,  z: 3 },
+    'tag--social':      { x: -95,  y: 145,  rot: 7,   z: 4 },
+    'tag--video':       { x: 210,  y: -35,  rot: -11, z: 5 },
+    'tag--uiux':        { x: -155, y: -80,  rot: 11,  z: 4 },
   };
 
-  const SERVICE_INFO = {
-    'tag--apps': {
-      title: 'Apps',
-      desc: 'Diseñamos interfaces claras y funcionales para apps móviles y productos digitales que la gente disfruta usar.',
-    },
-    'tag--foto': {
-      title: 'Fotografia',
-      desc: 'Producción visual para marcas: retratos, producto y contenido que comunica con intención y estilo.',
-    },
-    'tag--ilustracion': {
-      title: 'Ilustracion',
-      desc: 'Ilustración personalizada para campañas, packaging y piezas editoriales con identidad propia.',
-    },
-    'tag--editorial': {
-      title: 'Editorial',
-      desc: 'Diseño de catálogos, revistas y publicaciones con ritmo visual, tipografía y narrativa cuidada.',
-    },
-    'tag--web': {
-      title: 'web',
-      desc: 'Sitios y landing pages rápidos, responsive y alineados con la personalidad de tu marca.',
-    },
-    'tag--animacion': {
-      title: 'Animacion',
-      desc: 'Motion graphics y piezas animadas para redes, presentaciones y experiencias digitales memorables.',
-    },
-    'tag--branding': {
-      title: 'Branding',
-      desc: 'Construimos identidades completas: logo, sistema visual, voz y aplicaciones para cada touchpoint.',
-    },
-    'tag--estrategia': {
-      title: 'Estrategia',
-      desc: 'Definimos dirección creativa y posicionamiento para que cada decisión de diseño tenga propósito.',
-    },
+  const SERVICE_INFO = () => {
+    const i18n = window.RudoI18n;
+    if (!i18n) return {};
+    const map = {};
+    Object.keys(i18n.SERVICE_KEYS).forEach((classKey) => {
+      map[classKey] = i18n.getServiceInfo(classKey);
+    });
+    return map;
   };
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -451,7 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function showServiceInfo(tag) {
     const key = getClassKey(tag);
-    const info = SERVICE_INFO[key];
+    const info = SERVICE_INFO()[key];
     if (!info || !infoPanel || !infoTitle || !infoDesc) return;
 
     if (tag.classList.contains('is-selected')) {
@@ -678,6 +657,16 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('pointermove', onPointerMove);
   document.addEventListener('pointerup', onPointerUp);
   document.addEventListener('pointercancel', onPointerUp);
+
+  window.addEventListener('rudo:langchange', () => {
+    if (selectedTag && !selectedTag.classList.contains('is-dragging')) {
+      const info = SERVICE_INFO()[getClassKey(selectedTag)];
+      if (info && infoTitle && infoDesc) {
+        infoTitle.textContent = info.title;
+        infoDesc.textContent = info.desc;
+      }
+    }
+  });
 
   let lastWidth = cloud.offsetWidth;
   let resizeTimer;

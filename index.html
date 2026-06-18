@@ -68,8 +68,7 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="is-loading">
-
-  <div class="preloader" id="preloader" role="status" aria-live="polite" aria-label="Cargando">
+  <div class="preloader" id="preloader" role="status" aria-live="polite" data-i18n-attr="aria-label:a11y.loading">
     <img class="preloader__logo" src="assets/logo-red.png" alt="">
   </div>
 
@@ -78,54 +77,60 @@
       <a href="#inicio" class="logo logo--header">
         <img src="assets/logo-red.png" alt="RUDO">
       </a>
-      <button class="menu-toggle" aria-label="Abrir menú">
-        <span></span><span></span><span></span>
-      </button>
-      <nav class="nav">
-        <a href="#inicio" class="nav__link nav__link--active">Inicio</a>
-        <a href="#servicios" class="nav__link">Servicios</a>
-        <a href="#nosotros" class="nav__link">Nosotros</a>
-        <a href="#portafolio" class="nav__link">Portafolio</a>
-        <a href="#contacto" class="nav__link">Contacto</a>
-      </nav>
+      <div class="header__end">
+        <nav class="nav">
+          <a href="#inicio" class="nav__link nav__link--active" data-i18n="nav.home">Inicio</a>
+          <a href="#servicios" class="nav__link" data-i18n="nav.services">Servicios</a>
+          <a href="#nosotros" class="nav__link" data-i18n="nav.about">Nosotros</a>
+          <a href="#portafolio" class="nav__link" data-i18n="nav.portfolio">Portafolio</a>
+          <a href="#contacto" class="nav__link" data-i18n="nav.contact">Contacto</a>
+          <div class="lang-switch" role="group" data-i18n-attr="aria-label:a11y.langSwitch">
+            <button type="button" class="lang-switch__btn is-active" data-lang="es" aria-pressed="true">ES</button>
+            <button type="button" class="lang-switch__btn" data-lang="en" aria-pressed="false">EN</button>
+          </div>
+        </nav>
+        <button class="menu-toggle" data-i18n-attr="aria-label:a11y.openMenu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
     </div>
   </header>
 
   <main>
     <section class="hero-home" id="inicio">
       <h1 class="hero-home__title">
-        <span class="hero-home__line">ESTUDIO</span>
-        <span class="hero-home__line">CREATIVO</span>
+        <span class="hero-home__line" data-i18n="hero.line1">ESTUDIO</span>
+        <span class="hero-home__line" data-i18n="hero.line2">CREATIVO</span>
       </h1>
-      <p class="hero-home__subtitle hero-home__enter">Crea de la mano con nosotros</p>
+      <p class="hero-home__subtitle hero-home__enter" data-i18n="hero.subtitle">Crea de la mano con nosotros</p>
       <div class="hero-home__enter hero-home__enter--cta">
-        <a href="#contacto" class="btn btn--red">Comenzar</a>
+        <a href="#contacto" class="btn btn--red" data-i18n="cta.start">Comenzar</a>
       </div>
     </section>
 
     <div class="marquee" aria-hidden="true">
       <div class="marquee__track">
         <div class="marquee__content">
-          <span class="marquee__text">nuevas plazas disponibles en 2026</span>
+          <span class="marquee__text" data-i18n="marquee.text">nuevas plazas disponibles en 2026</span>
           <img class="marquee__vector" src="assets/marquee/vector.png" alt="">
-          <img class="marquee__phrase" src="assets/marquee/desarrollo-web.png" alt="desarrollo web">
-          <span class="marquee__text">nuevas plazas disponibles en 2026</span>
+          <span class="marquee__phrase" data-i18n="marquee.phrase">desarrollo web</span>
+          <span class="marquee__text" data-i18n="marquee.text">nuevas plazas disponibles en 2026</span>
           <img class="marquee__vector" src="assets/marquee/vector.png" alt="">
-          <img class="marquee__phrase" src="assets/marquee/desarrollo-web.png" alt="desarrollo web">
-          <span class="marquee__text">nuevas plazas disponibles en 2026</span>
+          <span class="marquee__phrase" data-i18n="marquee.phrase">desarrollo web</span>
+          <span class="marquee__text" data-i18n="marquee.text">nuevas plazas disponibles en 2026</span>
           <img class="marquee__vector" src="assets/marquee/vector.png" alt="">
-          <img class="marquee__phrase" src="assets/marquee/desarrollo-web.png" alt="desarrollo web">
+          <span class="marquee__phrase" data-i18n="marquee.phrase">desarrollo web</span>
         </div>
         <div class="marquee__content">
-          <span class="marquee__text">nuevas plazas disponibles en 2026</span>
+          <span class="marquee__text" data-i18n="marquee.text">nuevas plazas disponibles en 2026</span>
           <img class="marquee__vector" src="assets/marquee/vector.png" alt="">
-          <img class="marquee__phrase" src="assets/marquee/desarrollo-web.png" alt="desarrollo web">
-          <span class="marquee__text">nuevas plazas disponibles en 2026</span>
+          <span class="marquee__phrase" data-i18n="marquee.phrase">desarrollo web</span>
+          <span class="marquee__text" data-i18n="marquee.text">nuevas plazas disponibles en 2026</span>
           <img class="marquee__vector" src="assets/marquee/vector.png" alt="">
-          <img class="marquee__phrase" src="assets/marquee/desarrollo-web.png" alt="desarrollo web">
-          <span class="marquee__text">nuevas plazas disponibles en 2026</span>
+          <span class="marquee__phrase" data-i18n="marquee.phrase">desarrollo web</span>
+          <span class="marquee__text" data-i18n="marquee.text">nuevas plazas disponibles en 2026</span>
           <img class="marquee__vector" src="assets/marquee/vector.png" alt="">
-          <img class="marquee__phrase" src="assets/marquee/desarrollo-web.png" alt="desarrollo web">
+          <span class="marquee__phrase" data-i18n="marquee.phrase">desarrollo web</span>
         </div>
       </div>
     </div>
@@ -135,28 +140,32 @@
         <div class="services__grid">
           <div class="services__heading-block">
             <div class="services__frame">
-              <h2 class="services__label">NUESTROS</h2>
-              <p class="services__outline">SERVICIOS</p>
+              <h2 class="services__label" data-i18n="services.our">NUESTROS</h2>
+              <p class="services__outline" data-i18n="services.title">SERVICIOS</p>
             </div>
           </div>
           <div class="services__info">
-            <p class="services__desc">Creamos soluciones creativas completas para marcas que quieren verse bien y funcionar mejor.</p>
-            <a href="#contacto" class="btn btn--dark btn--sm">Comenzar</a>
+            <p class="services__desc" data-i18n="services.desc">Creamos soluciones creativas completas para marcas que quieren verse bien y funcionar mejor.</p>
+            <a href="#contacto" class="btn btn--dark btn--sm" data-i18n="cta.start">Comenzar</a>
           </div>
-          <div class="tags-cloud" aria-label="Etiquetas de servicios interactivas">
+          <div class="tags-cloud" data-i18n-attr="aria-label:a11y.tagsCloud">
             <div class="tags-cloud__stage">
-            <img class="tag tag--apps" src="assets/tags/apps.png" alt="Apps" draggable="false" role="button" tabindex="0">
-            <img class="tag tag--foto" src="assets/tags/fotografia.png" alt="Fotografia" draggable="false" role="button" tabindex="0">
-            <img class="tag tag--ilustracion" src="assets/tags/ilustracion.png" alt="Ilustracion" draggable="false" role="button" tabindex="0">
-            <img class="tag tag--editorial" src="assets/tags/editorial.png" alt="Editorial" draggable="false" role="button" tabindex="0">
-            <img class="tag tag--web" src="assets/tags/web.png" alt="web" draggable="false" role="button" tabindex="0">
-            <img class="tag tag--animacion" src="assets/tags/animacion.png" alt="Animacion" draggable="false" role="button" tabindex="0">
-            <img class="tag tag--branding" src="assets/tags/branding.png" alt="Branding" draggable="false" role="button" tabindex="0">
-            <img class="tag tag--estrategia" src="assets/tags/estrategia.png" alt="Estrategia" draggable="false" role="button" tabindex="0">
+            <button type="button" class="tag tag--apps" data-i18n="services.apps.title">Apps</button>
+            <button type="button" class="tag tag--foto" data-i18n="services.foto.title">Fotografia</button>
+            <button type="button" class="tag tag--ilustracion" data-i18n="services.ilustracion.title">Ilustracion</button>
+            <button type="button" class="tag tag--editorial" data-i18n="services.editorial.title">Editorial</button>
+            <button type="button" class="tag tag--web" data-i18n="services.web.title">web</button>
+            <button type="button" class="tag tag--animacion" data-i18n="services.animacion.title">Animacion</button>
+            <button type="button" class="tag tag--branding" data-i18n="services.branding.title">Branding</button>
+            <button type="button" class="tag tag--estrategia" data-i18n="services.estrategia.title">Estrategia</button>
+            <button type="button" class="tag tag--packaging" data-i18n="services.packaging.title">Empaque</button>
+            <button type="button" class="tag tag--social" data-i18n="services.social.title">Redes</button>
+            <button type="button" class="tag tag--video" data-i18n="services.video.title">Video</button>
+            <button type="button" class="tag tag--uiux" data-i18n="services.uiux.title">UI/UX</button>
             </div>
             <div class="tag-info" id="tag-info" hidden aria-live="polite">
-              <button type="button" class="tag-info__close" aria-label="Cerrar información">&times;</button>
-              <p class="tag-info__label">Servicio</p>
+              <button type="button" class="tag-info__close" data-i18n-attr="aria-label:a11y.closeInfo">&times;</button>
+              <p class="tag-info__label" data-i18n="services.label">Servicio</p>
               <h3 class="tag-info__title"></h3>
               <p class="tag-info__desc"></p>
             </div>
@@ -169,13 +178,13 @@
       <section class="about">
         <div class="container">
           <div class="about__header">
-            <div class="about__chip">NOSOTROS</div>
-            <h2 class="about__title">RUDO ESTUDIO</h2>
+            <div class="about__chip" data-i18n="about.chip">NOSOTROS</div>
+            <h2 class="about__title" data-i18n="about.title">RUDO ESTUDIO</h2>
           </div>
-          <p class="about__intro">
+          <p class="about__intro" data-i18n="about.intro">
             NACIÓ EN SEPTIEMBRE DE 2024 CON LA VISIÓN DE REVOLUCIONAR EL DISEÑO EN CARTAGENA. EXISTIMOS PORQUE HAY DEMASIADAS MARCAS QUE SE VEN IGUALES, GENÉRICAS Y SIN INTENCIÓN, Y ESO LES CUESTA CONEXIÓN, RELEVANCIA Y CRECIMIENTO REAL.
           </p>
-          <p class="about__body">
+          <p class="about__body" data-i18n="about.body">
             Somos un estudio creativo que combina diseño gráfico, branding, fotografía, animación y desarrollo web. Creemos en el diseño con propósito: cada proyecto es una oportunidad de contar una historia única y construir marcas que realmente conecten con su audiencia. Trabajamos de la mano con nuestros clientes para transformar ideas en experiencias visuales memorables.
           </p>
         </div>
@@ -184,7 +193,7 @@
       <section class="team">
         <div class="container team__container">
           <div class="team__stage">
-            <p class="team__bg-text" aria-hidden="true">CREADORES</p>
+            <p class="team__bg-text" aria-hidden="true" data-i18n="team.creators">CREADORES</p>
             <div class="team__grid">
               <article class="team-card">
                 <div class="team-card__shell" tabindex="0">
@@ -193,12 +202,12 @@
                   </div>
                   <div class="team-card__overlay">
                     <p class="team-card__overlay-name">Jaxir Diaz</p>
-                    <p class="team-card__overlay-role">Diseñador Gráfico</p>
-                    <p class="team-card__overlay-bio">Especialista en identidad visual y piezas editoriales. Transforma conceptos en sistemas gráficos coherentes y memorables.</p>
+                    <p class="team-card__overlay-role" data-i18n="team.jaxir.role">Diseñador Gráfico</p>
+                    <p class="team-card__overlay-bio" data-i18n="team.jaxir.bio">Especialista en identidad visual y piezas editoriales. Transforma conceptos en sistemas gráficos coherentes y memorables.</p>
                   </div>
                   <div class="team-card__info">
                     <h3 class="team-card__name">Jaxir Diaz</h3>
-                    <p class="team-card__role">Diseñador Gráfico</p>
+                    <p class="team-card__role" data-i18n="team.jaxir.role">Diseñador Gráfico</p>
                   </div>
                 </div>
               </article>
@@ -210,12 +219,12 @@
                   </div>
                   <div class="team-card__overlay">
                     <p class="team-card__overlay-name">Rosa Bossa</p>
-                    <p class="team-card__overlay-role">Diseñadora Gráfica</p>
-                    <p class="team-card__overlay-bio">Apasionada por el branding y la narrativa visual. Crea marcas con personalidad que conectan emocionalmente con su audiencia.</p>
+                    <p class="team-card__overlay-role" data-i18n="team.rosa.role">Diseñadora Gráfica</p>
+                    <p class="team-card__overlay-bio" data-i18n="team.rosa.bio">Apasionada por el branding y la narrativa visual. Crea marcas con personalidad que conectan emocionalmente con su audiencia.</p>
                   </div>
                   <div class="team-card__info">
                     <h3 class="team-card__name">Rosa Bossa</h3>
-                    <p class="team-card__role">Diseñadora Gráfica</p>
+                    <p class="team-card__role" data-i18n="team.rosa.role">Diseñadora Gráfica</p>
                   </div>
                 </div>
               </article>
@@ -227,12 +236,12 @@
                   </div>
                   <div class="team-card__overlay">
                     <p class="team-card__overlay-name">Alvaro Pérez</p>
-                    <p class="team-card__overlay-role">Ingeniero de Software</p>
-                    <p class="team-card__overlay-bio">Desarrolla experiencias web funcionales y escalables. Une diseño y tecnología para que cada proyecto funcione tan bien como se ve.</p>
+                    <p class="team-card__overlay-role" data-i18n="team.alvaro.role">Ingeniero de Software</p>
+                    <p class="team-card__overlay-bio" data-i18n="team.alvaro.bio">Desarrolla experiencias web funcionales y escalables. Une diseño y tecnología para que cada proyecto funcione tan bien como se ve.</p>
                   </div>
                   <div class="team-card__info">
                     <h3 class="team-card__name">Alvaro Pérez</h3>
-                    <p class="team-card__role">Ingeniero de Software</p>
+                    <p class="team-card__role" data-i18n="team.alvaro.role">Ingeniero de Software</p>
                   </div>
                 </div>
               </article>
@@ -245,7 +254,7 @@
     <section id="portafolio">
       <div class="hero-banner hero-banner--portafolio">
         <div class="hero-banner__pattern" aria-hidden="true"></div>
-        <h2 class="hero-banner__title hero-banner__title-text">PORTAFOLIO</h2>
+        <h2 class="hero-banner__title hero-banner__title-text" data-i18n="portfolio.title">PORTAFOLIO</h2>
       </div>
 
       <div class="container">
@@ -254,16 +263,16 @@
             <div class="portfolio-item__shell" tabindex="0">
               <div class="portfolio-item__inner">
               <div class="portfolio-item__media-wrap">
-                <img class="portfolio-item__img" src="https://placehold.co/480x600/e8dfd6/e30613?text=Proyecto+01" alt="Proyecto Branding" loading="lazy">
+                <img class="portfolio-item__img" src="https://placehold.co/480x600/e8dfd6/e30613?text=Proyecto+01" data-i18n-attr="alt:portfolio.p1.alt" alt="Proyecto Branding" loading="lazy">
                 <div class="portfolio-item__overlay">
-                  <p class="portfolio-item__overlay-name">Proyecto 01</p>
-                  <p class="portfolio-item__overlay-role">Branding</p>
-                  <p class="portfolio-item__overlay-bio">Identidad visual y sistema gráfico para una marca en crecimiento.</p>
+                  <p class="portfolio-item__overlay-name" data-i18n="portfolio.p1.name">Proyecto 01</p>
+                  <p class="portfolio-item__overlay-role" data-i18n="portfolio.p1.role">Branding</p>
+                  <p class="portfolio-item__overlay-bio" data-i18n="portfolio.p1.bio">Identidad visual y sistema gráfico para una marca en crecimiento.</p>
                 </div>
               </div>
               <div class="portfolio-item__info">
-                <h3 class="portfolio-item__name">Proyecto 01</h3>
-                <p class="portfolio-item__category">Branding</p>
+                <h3 class="portfolio-item__name" data-i18n="portfolio.p1.name">Proyecto 01</h3>
+                <p class="portfolio-item__category" data-i18n="portfolio.p1.role">Branding</p>
               </div>
             </div>
             </div>
@@ -273,16 +282,16 @@
             <div class="portfolio-item__shell" tabindex="0">
               <div class="portfolio-item__inner">
               <div class="portfolio-item__media-wrap">
-                <img class="portfolio-item__img" src="https://placehold.co/480x600/e8dfd6/e30613?text=Proyecto+02" alt="Proyecto Web" loading="lazy">
+                <img class="portfolio-item__img" src="https://placehold.co/480x600/e8dfd6/e30613?text=Proyecto+02" data-i18n-attr="alt:portfolio.p2.alt" alt="Proyecto Web" loading="lazy">
                 <div class="portfolio-item__overlay">
-                  <p class="portfolio-item__overlay-name">Proyecto 02</p>
-                  <p class="portfolio-item__overlay-role">Web</p>
-                  <p class="portfolio-item__overlay-bio">Sitio web con enfoque en experiencia de usuario y conversión.</p>
+                  <p class="portfolio-item__overlay-name" data-i18n="portfolio.p2.name">Proyecto 02</p>
+                  <p class="portfolio-item__overlay-role" data-i18n="portfolio.p2.role">Web</p>
+                  <p class="portfolio-item__overlay-bio" data-i18n="portfolio.p2.bio">Sitio web con enfoque en experiencia de usuario y conversión.</p>
                 </div>
               </div>
               <div class="portfolio-item__info">
-                <h3 class="portfolio-item__name">Proyecto 02</h3>
-                <p class="portfolio-item__category">Web</p>
+                <h3 class="portfolio-item__name" data-i18n="portfolio.p2.name">Proyecto 02</h3>
+                <p class="portfolio-item__category" data-i18n="portfolio.p2.role">Web</p>
               </div>
             </div>
             </div>
@@ -292,16 +301,16 @@
             <div class="portfolio-item__shell" tabindex="0">
               <div class="portfolio-item__inner">
               <div class="portfolio-item__media-wrap">
-                <img class="portfolio-item__img" src="https://placehold.co/480x600/e8dfd6/e30613?text=Proyecto+03" alt="Proyecto Editorial" loading="lazy">
+                <img class="portfolio-item__img" src="https://placehold.co/480x600/e8dfd6/e30613?text=Proyecto+03" data-i18n-attr="alt:portfolio.p3.alt" alt="Proyecto Editorial" loading="lazy">
                 <div class="portfolio-item__overlay">
-                  <p class="portfolio-item__overlay-name">Proyecto 03</p>
-                  <p class="portfolio-item__overlay-role">Editorial</p>
-                  <p class="portfolio-item__overlay-bio">Piezas editoriales y publicaciones con narrativa visual cuidada.</p>
+                  <p class="portfolio-item__overlay-name" data-i18n="portfolio.p3.name">Proyecto 03</p>
+                  <p class="portfolio-item__overlay-role" data-i18n="portfolio.p3.role">Editorial</p>
+                  <p class="portfolio-item__overlay-bio" data-i18n="portfolio.p3.bio">Piezas editoriales y publicaciones con narrativa visual cuidada.</p>
                 </div>
               </div>
               <div class="portfolio-item__info">
-                <h3 class="portfolio-item__name">Proyecto 03</h3>
-                <p class="portfolio-item__category">Editorial</p>
+                <h3 class="portfolio-item__name" data-i18n="portfolio.p3.name">Proyecto 03</h3>
+                <p class="portfolio-item__category" data-i18n="portfolio.p3.role">Editorial</p>
               </div>
             </div>
             </div>
@@ -311,16 +320,16 @@
             <div class="portfolio-item__shell" tabindex="0">
               <div class="portfolio-item__inner">
               <div class="portfolio-item__media-wrap">
-                <img class="portfolio-item__img" src="https://placehold.co/480x600/e8dfd6/e30613?text=Proyecto+04" alt="Proyecto Fotografia" loading="lazy">
+                <img class="portfolio-item__img" src="https://placehold.co/480x600/e8dfd6/e30613?text=Proyecto+04" data-i18n-attr="alt:portfolio.p4.alt" alt="Proyecto Fotografia" loading="lazy">
                 <div class="portfolio-item__overlay">
-                  <p class="portfolio-item__overlay-name">Proyecto 04</p>
-                  <p class="portfolio-item__overlay-role">Fotografia</p>
-                  <p class="portfolio-item__overlay-bio">Sesión fotográfica y dirección de arte para campaña de producto.</p>
+                  <p class="portfolio-item__overlay-name" data-i18n="portfolio.p4.name">Proyecto 04</p>
+                  <p class="portfolio-item__overlay-role" data-i18n="portfolio.p4.role">Fotografia</p>
+                  <p class="portfolio-item__overlay-bio" data-i18n="portfolio.p4.bio">Sesión fotográfica y dirección de arte para campaña de producto.</p>
                 </div>
               </div>
               <div class="portfolio-item__info">
-                <h3 class="portfolio-item__name">Proyecto 04</h3>
-                <p class="portfolio-item__category">Fotografia</p>
+                <h3 class="portfolio-item__name" data-i18n="portfolio.p4.name">Proyecto 04</h3>
+                <p class="portfolio-item__category" data-i18n="portfolio.p4.role">Fotografia</p>
               </div>
             </div>
             </div>
@@ -330,16 +339,16 @@
             <div class="portfolio-item__shell" tabindex="0">
               <div class="portfolio-item__inner">
               <div class="portfolio-item__media-wrap">
-                <img class="portfolio-item__img" src="https://placehold.co/480x600/e8dfd6/e30613?text=Proyecto+05" alt="Proyecto Animacion" loading="lazy">
+                <img class="portfolio-item__img" src="https://placehold.co/480x600/e8dfd6/e30613?text=Proyecto+05" data-i18n-attr="alt:portfolio.p5.alt" alt="Proyecto Animacion" loading="lazy">
                 <div class="portfolio-item__overlay">
-                  <p class="portfolio-item__overlay-name">Proyecto 05</p>
-                  <p class="portfolio-item__overlay-role">Animacion</p>
-                  <p class="portfolio-item__overlay-bio">Motion graphics para redes y presentación de marca.</p>
+                  <p class="portfolio-item__overlay-name" data-i18n="portfolio.p5.name">Proyecto 05</p>
+                  <p class="portfolio-item__overlay-role" data-i18n="portfolio.p5.role">Animacion</p>
+                  <p class="portfolio-item__overlay-bio" data-i18n="portfolio.p5.bio">Motion graphics para redes y presentación de marca.</p>
                 </div>
               </div>
               <div class="portfolio-item__info">
-                <h3 class="portfolio-item__name">Proyecto 05</h3>
-                <p class="portfolio-item__category">Animacion</p>
+                <h3 class="portfolio-item__name" data-i18n="portfolio.p5.name">Proyecto 05</h3>
+                <p class="portfolio-item__category" data-i18n="portfolio.p5.role">Animacion</p>
               </div>
             </div>
             </div>
@@ -349,16 +358,16 @@
             <div class="portfolio-item__shell" tabindex="0">
               <div class="portfolio-item__inner">
               <div class="portfolio-item__media-wrap">
-                <img class="portfolio-item__img" src="https://placehold.co/480x600/e8dfd6/e30613?text=Proyecto+06" alt="Proyecto Estrategia" loading="lazy">
+                <img class="portfolio-item__img" src="https://placehold.co/480x600/e8dfd6/e30613?text=Proyecto+06" data-i18n-attr="alt:portfolio.p6.alt" alt="Proyecto Estrategia" loading="lazy">
                 <div class="portfolio-item__overlay">
-                  <p class="portfolio-item__overlay-name">Proyecto 06</p>
-                  <p class="portfolio-item__overlay-role">Estrategia</p>
-                  <p class="portfolio-item__overlay-bio">Dirección creativa y posicionamiento de marca.</p>
+                  <p class="portfolio-item__overlay-name" data-i18n="portfolio.p6.name">Proyecto 06</p>
+                  <p class="portfolio-item__overlay-role" data-i18n="portfolio.p6.role">Estrategia</p>
+                  <p class="portfolio-item__overlay-bio" data-i18n="portfolio.p6.bio">Dirección creativa y posicionamiento de marca.</p>
                 </div>
               </div>
               <div class="portfolio-item__info">
-                <h3 class="portfolio-item__name">Proyecto 06</h3>
-                <p class="portfolio-item__category">Estrategia</p>
+                <h3 class="portfolio-item__name" data-i18n="portfolio.p6.name">Proyecto 06</h3>
+                <p class="portfolio-item__category" data-i18n="portfolio.p6.role">Estrategia</p>
               </div>
             </div>
             </div>
@@ -371,27 +380,27 @@
       <div class="contact-section__border" aria-hidden="true"></div>
       <div class="container contact-section__inner">
         <div class="contact-section__content">
-          <h2 class="contact-section__title">
+          <h2 class="contact-section__title" data-i18n-html="contact.title">
             Hola!<br>
             <span>Queremos conocer tu proyecto</span>
           </h2>
           <form class="contact-form" id="contact-form" novalidate>
             <div class="contact-form__intro">
-              <label class="contact-form__label" for="contact-nombre">Para comenzar, ¿cómo te llamas?</label>
+              <label class="contact-form__label" for="contact-nombre" data-i18n="contact.nameLabel">Para comenzar, ¿cómo te llamas?</label>
               <input class="contact-form__input" type="text" id="contact-nombre" name="nombre" autocomplete="name" required>
             </div>
 
             <div class="contact-form__rest" id="contact-form-rest">
               <div class="contact-form__rest-inner">
-                <label class="contact-form__label" for="contact-email">¿Cuál es tu correo?</label>
+                <label class="contact-form__label" for="contact-email" data-i18n="contact.emailLabel">¿Cuál es tu correo?</label>
                 <input class="contact-form__input" type="email" id="contact-email" name="email" autocomplete="email" inputmode="email" required>
 
-                <label class="contact-form__label" for="contact-telefono">¿Tu número de WhatsApp o teléfono?</label>
+                <label class="contact-form__label" for="contact-telefono" data-i18n="contact.phoneLabel">¿Tu número de WhatsApp o teléfono?</label>
                 <input class="contact-form__input" type="tel" id="contact-telefono" name="telefono" autocomplete="tel" inputmode="tel" required>
 
-                <label class="contact-form__label" for="contact-servicio">¿Qué servicio te interesa?</label>
+                <label class="contact-form__label" for="contact-servicio" data-i18n="contact.serviceLabel">¿Qué servicio te interesa?</label>
                 <select class="contact-form__input contact-form__select" id="contact-servicio" name="servicio" required>
-                  <option value="" disabled selected>Selecciona una opción</option>
+                  <option value="" disabled selected data-i18n="contact.selectDefault">Selecciona una opción</option>
                   <option value="Branding">Branding</option>
                   <option value="Web">Web</option>
                   <option value="Fotografia">Fotografia</option>
@@ -400,16 +409,20 @@
                   <option value="Animacion">Animacion</option>
                   <option value="Apps">Apps</option>
                   <option value="Estrategia">Estrategia</option>
-                  <option value="Otro">Otro / varios servicios</option>
+                  <option value="Empaque">Empaque</option>
+                  <option value="Redes">Redes</option>
+                  <option value="Video">Video</option>
+                  <option value="UI/UX">UI/UX</option>
+                  <option value="Otro" data-i18n="contact.serviceOther">Otro / varios servicios</option>
                 </select>
 
-                <label class="contact-form__label" for="contact-proyecto">Cuéntanos sobre tu proyecto</label>
-                <textarea class="contact-form__input contact-form__textarea" id="contact-proyecto" name="proyecto" rows="4" required placeholder="¿Qué necesitas? ¿Para cuándo? ¿Algún detalle importante?"></textarea>
+                <label class="contact-form__label" for="contact-proyecto" data-i18n="contact.projectLabel">Cuéntanos sobre tu proyecto</label>
+                <textarea class="contact-form__input contact-form__textarea" id="contact-proyecto" name="proyecto" rows="4" required data-i18n-placeholder="contact.projectPlaceholder" placeholder="¿Qué necesitas? ¿Para cuándo? ¿Algún detalle importante?"></textarea>
               </div>
             </div>
 
             <div class="contact-form__actions">
-              <button type="submit" class="btn btn--dark contact-form__submit">Continuar</button>
+              <button type="submit" class="btn btn--dark contact-form__submit" data-i18n="contact.continue">Continuar</button>
             </div>
           </form>
         </div>
@@ -419,35 +432,36 @@
 
   <footer class="footer">
     <div class="footer__main">
-      <a href="#inicio" class="footer__logo logo logo--footer" aria-label="Volver al inicio">
+      <a href="#inicio" class="footer__logo logo logo--footer" data-i18n-attr="aria-label:a11y.backHome">
         <img src="assets/logo-white.png" alt="RUDO">
       </a>
       <div class="footer__contact">
         <p>Cartagena, Colombia</p>
         <p><a href="mailto:contacto@rudoestudio.com">contacto@rudoestudio.com</a></p>
         <p><a href="tel:+573053300303">+57 305 3300303</a></p>
-        <p>Ubicación: Cl. 35 #No. 88 - 6, San Diego, Provincia de Cartagena, Bolívar</p>
+        <p><span data-i18n="footer.location">Ubicación</span>: Cl. 35 #No. 88 - 6, San Diego, Provincia de Cartagena, Bolívar</p>
       </div>
       <div class="footer__social">
-        <p class="footer__social-title">SÍGUENOS</p>
+        <p class="footer__social-title" data-i18n="footer.follow">SÍGUENOS</p>
         <div class="footer__social-links">
-          <a href="https://www.instagram.com/rudo_estudio/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Rudo Estudio"><i class="fa-brands fa-instagram"></i></a>
-          <a href="https://www.behance.net/rudodazbossa/moodboards" target="_blank" rel="noopener noreferrer" aria-label="Behance de Rudo Estudio"><i class="fa-brands fa-behance"></i></a>
-          <a href="https://www.facebook.com/people/Rudo-Estudio/61575573260293/" target="_blank" rel="noopener noreferrer" aria-label="Facebook de Rudo Estudio"><i class="fa-brands fa-facebook-f"></i></a>
-          <a href="https://www.tiktok.com/@rudo_estudio" target="_blank" rel="noopener noreferrer" aria-label="TikTok de Rudo Estudio"><i class="fa-brands fa-tiktok"></i></a>
+          <a href="https://www.instagram.com/rudo_estudio/" target="_blank" rel="noopener noreferrer" data-i18n-attr="aria-label:a11y.instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://www.behance.net/rudodazbossa/moodboards" target="_blank" rel="noopener noreferrer" data-i18n-attr="aria-label:a11y.behance"><i class="fa-brands fa-behance"></i></a>
+          <a href="https://www.facebook.com/people/Rudo-Estudio/61575573260293/" target="_blank" rel="noopener noreferrer" data-i18n-attr="aria-label:a11y.facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="https://www.tiktok.com/@rudo_estudio" target="_blank" rel="noopener noreferrer" data-i18n-attr="aria-label:a11y.tiktok"><i class="fa-brands fa-tiktok"></i></a>
         </div>
       </div>
     </div>
     <div class="footer__bottom">
-      <span>© 2025 Rudo Estudio. Todos los derechos reservados.</span>
-      <span>Diseñado por | RudoEstudio</span>
+      <span data-i18n="footer.rights">© 2025 Rudo Estudio. Todos los derechos reservados.</span>
+      <span data-i18n="footer.credit">Diseñado por | RudoEstudio</span>
     </div>
   </footer>
 
+  <script src="js/i18n.js"></script>
+  <script src="js/loader.js"></script>
   <script src="js/services-tags.js"></script>
   <script src="js/contact-form.js"></script>
   <script src="js/animations.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/loader.js"></script>
 </body>
 </html>
