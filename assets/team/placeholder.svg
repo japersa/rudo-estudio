@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" fill="none">
+  <rect width="400" height="500" fill="#e8dfd6"/>
+  <rect x="1" y="1" width="398" height="498" stroke="#e30613" stroke-width="1" opacity="0.12"/>
+  <circle cx="200" cy="188" r="52" fill="#fdf2e9" stroke="#e30613" stroke-width="1.5" opacity="0.35"/>
+  <path d="M108 380 C108 318 148 278 200 278 C252 278 292 318 292 380 Z" fill="#fdf2e9" stroke="#e30613" stroke-width="1.5" opacity="0.35"/>
+  <text x="200" y="440" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="18" fill="#e30613" opacity="0.55" letter-spacing="0.08em">FOTO</text>
+</svg>

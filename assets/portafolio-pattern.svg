@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" fill="none" aria-hidden="true">
+  <g opacity="0.18">
+    <text
+      x="720"
+      y="168"
+      text-anchor="middle"
+      font-family="Inter, Arial Black, system-ui, sans-serif"
+      font-weight="900"
+      font-size="268"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="14"
+      letter-spacing="-10"
+    >PORTAFOLIO</text>
+  </g>
+  <g opacity="0.42">
+    <text
+      x="720"
+      y="168"
+      text-anchor="middle"
+      font-family="Inter, Arial Black, system-ui, sans-serif"
+      font-weight="900"
+      font-size="268"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="3.5"
+      letter-spacing="-10"
+    >PORTAFOLIO</text>
+  </g>
+  <g opacity="0.12">
+    <text
+      x="-40"
+      y="168"
+      text-anchor="start"
+      font-family="Inter, Arial Black, system-ui, sans-serif"
+      font-weight="900"
+      font-size="268"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="2"
+      letter-spacing="-10"
+    >PORT</text>
+    <text
+      x="1480"
+      y="168"
+      text-anchor="end"
+      font-family="Inter, Arial Black, system-ui, sans-serif"
+      font-weight="900"
+      font-size="268"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="2"
+      letter-spacing="-10"
+    >FOLIO</text>
+  </g>
+</svg>

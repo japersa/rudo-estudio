@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 600" fill="none">
+  <rect width="480" height="600" fill="#e8dfd6"/>
+  <rect x="1" y="1" width="478" height="598" stroke="#e30613" stroke-width="1" opacity="0.12"/>
+  <rect x="120" y="200" width="240" height="180" rx="12" fill="#fdf2e9" stroke="#e30613" stroke-width="1.5" opacity="0.35"/>
+  <circle cx="188" cy="262" r="22" fill="none" stroke="#e30613" stroke-width="1.5" opacity="0.45"/>
+  <path d="M148 352 L210 290 L252 322 L332 248 L332 352 Z" fill="#e30613" opacity="0.12"/>
+  <path d="M148 352 L210 290 L252 322 L332 248" stroke="#e30613" stroke-width="1.5" opacity="0.35"/>
+  <text x="240" y="430" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="22" fill="#e30613" opacity="0.55" letter-spacing="0.08em">PROYECTO</text>
+</svg>
