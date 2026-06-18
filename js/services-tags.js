@@ -55,6 +55,16 @@ document.addEventListener('DOMContentLoaded', () => {
     },
   };
 
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const gravityEnabled = !reducedMotion;
+  const GRAVITY = 720;
+  const DAMPING = 0.96;
+  const RESTITUTION = 0.28;
+  const TAG_RESTITUTION = 0.12;
+  const FRICTION = 0.82;
+  const SLEEP_VELOCITY = 18;
+  const SLEEP_FRAMES = 10;
+
   let zTop = 10;
   let activeTag = null;
   let selectedTag = null;
@@ -63,13 +73,23 @@ document.addEventListener('DOMContentLoaded', () => {
   let rotateStart = { angle: 0, rot: 0 };
   let pointerStart = { x: 0, y: 0 };
   let didDrag = false;
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const floatEnabled = !reducedMotion;
-  let floatTick = 0;
   let entranceDone = false;
+  let physicsActive = false;
+  let lastPhysicsTime = 0;
+  let dragVelocity = { x: 0, y: 0 };
+  let lastDragSample = { x: 0, y: 0, t: 0 };
 
   function scaleFactor() {
-    return cloud.offsetWidth / 720;
+    const w = cloud.offsetWidth / 720;
+    const h = cloud.offsetHeight / 320;
+    return Math.max(w, h, 1);
+  }
+
+  function axisScale() {
+    return {
+      x: cloud.offsetWidth / 720,
+      y: cloud.offsetHeight / 320,
+    };
   }
 
   function randomInRange(min, max) {
@@ -80,30 +100,36 @@ document.addEventListener('DOMContentLoaded', () => {
     return [...tag.classList].find(c => c.startsWith('tag--')) || '';
   }
 
+  function ensureVelocity(state) {
+    if (state.vx === undefined) state.vx = 0;
+    if (state.vy === undefined) state.vy = 0;
+    if (state.vr === undefined) state.vr = 0;
+  }
+
   function createLayout(tag) {
     const base = BASE_LAYOUT[getClassKey(tag)] || { x: 0, y: 0, rot: 0, z: 1 };
-    const s = scaleFactor();
+    const { x: sx, y: sy } = axisScale();
 
     return {
-      x: (base.x + randomInRange(-18, 18)) * s,
-      y: (base.y + randomInRange(-14, 14)) * s,
+      x: (base.x + randomInRange(-22, 22)) * sx,
+      y: (base.y + randomInRange(-18, 18)) * sy,
       rot: base.rot + randomInRange(-3, 3),
+      vx: 0,
+      vy: 0,
+      vr: 0,
       z: base.z,
     };
   }
 
-  function applyTransform(tag, index = tags.indexOf(tag)) {
+  function applyTransform(tag) {
     const { x, y, rot } = tag._state;
-    const floatY = floatEnabled && !tag.classList.contains('is-dragging')
-      ? Math.sin((floatTick / 1000) * 1.15 + index * 0.9) * 3.5
-      : 0;
-    tag.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y + floatY}px)) rotate(${rot}deg)`;
+    tag.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${rot}deg)`;
   }
 
   function layoutTags() {
     tags.forEach((tag) => {
       const layout = createLayout(tag);
-      tag._state = { x: layout.x, y: layout.y, rot: layout.rot };
+      tag._state = layout;
       tag.style.zIndex = String(layout.z);
       applyTransform(tag);
     });
@@ -111,52 +137,272 @@ document.addEventListener('DOMContentLoaded', () => {
     zTop = tags.length + 10;
   }
 
+  function getBounds() {
+    const pad = 8 * scaleFactor();
+    const halfW = cloud.offsetWidth / 2;
+    const halfH = cloud.offsetHeight / 2;
+
+    return {
+      left: -halfW + pad,
+      right: halfW - pad,
+      top: -halfH + pad,
+      bottom: halfH - pad,
+    };
+  }
+
+  function getTagRadius(tag) {
+    if (tag._radius) return tag._radius;
+    const rect = tag.getBoundingClientRect();
+    return Math.max(rect.width, rect.height) * 0.42;
+  }
+
+  function cacheTagRadii() {
+    tags.forEach((tag) => {
+      const rect = tag.getBoundingClientRect();
+      tag._radius = Math.max(rect.width, rect.height) * 0.42;
+    });
+  }
+
+  function wakeTag(tag) {
+    ensureVelocity(tag._state);
+    tag._state.sleeping = false;
+    tag._state.sleepFrames = 0;
+    startPhysics();
+  }
+
+  function wakeAllTags() {
+    tags.forEach((tag) => {
+      ensureVelocity(tag._state);
+      tag._state.sleeping = false;
+      tag._state.sleepFrames = 0;
+    });
+    startPhysics();
+  }
+
+  function clampStateToBounds(tag) {
+    const bounds = getBounds();
+    const radius = getTagRadius(tag);
+    const state = tag._state;
+
+    state.x = Math.max(bounds.left + radius, Math.min(bounds.right - radius, state.x));
+    state.y = Math.max(bounds.top + radius, Math.min(bounds.bottom - radius, state.y));
+  }
+
+  function resolveWallCollision(tag, bounds) {
+    const radius = getTagRadius(tag);
+    const state = tag._state;
+
+    if (state.x - radius < bounds.left) {
+      state.x = bounds.left + radius;
+      state.vx = Math.abs(state.vx) * RESTITUTION;
+    }
+
+    if (state.x + radius > bounds.right) {
+      state.x = bounds.right - radius;
+      state.vx = -Math.abs(state.vx) * RESTITUTION;
+    }
+
+    if (state.y - radius < bounds.top) {
+      state.y = bounds.top + radius;
+      state.vy = Math.abs(state.vy) * RESTITUTION;
+    }
+
+    if (state.y + radius > bounds.bottom) {
+      state.y = bounds.bottom - radius;
+      if (Math.abs(state.vy) > SLEEP_VELOCITY) {
+        state.vy = -state.vy * RESTITUTION;
+        state.vx *= FRICTION;
+        state.vr *= 0.9;
+      } else {
+        state.vy = 0;
+        state.vx *= 0.85;
+        state.vr *= 0.85;
+      }
+    }
+  }
+
+  function trySleepTag(tag, bounds) {
+    const state = tag._state;
+    const radius = getTagRadius(tag);
+    const onFloor = state.y + radius >= bounds.bottom - 1.5;
+    const slow = Math.abs(state.vx) < SLEEP_VELOCITY
+      && Math.abs(state.vy) < SLEEP_VELOCITY
+      && Math.abs(state.vr) < 0.2;
+
+    if (!onFloor || !slow) {
+      state.sleepFrames = 0;
+      return;
+    }
+
+    state.sleepFrames = (state.sleepFrames || 0) + 1;
+    if (state.sleepFrames >= SLEEP_FRAMES) {
+      state.sleeping = true;
+      state.vx = 0;
+      state.vy = 0;
+      state.vr = 0;
+      state.y = bounds.bottom - radius;
+    }
+  }
+
+  function resolveTagCollisions() {
+    for (let i = 0; i < tags.length; i += 1) {
+      for (let j = i + 1; j < tags.length; j += 1) {
+        const a = tags[i];
+        const b = tags[j];
+        if (a.classList.contains('is-dragging') || b.classList.contains('is-dragging')) continue;
+        if (a._state.sleeping && b._state.sleeping) continue;
+
+        const dx = b._state.x - a._state.x;
+        const dy = b._state.y - a._state.y;
+        const distance = Math.hypot(dx, dy) || 0.001;
+        const minDistance = getTagRadius(a) + getTagRadius(b);
+
+        if (distance >= minDistance) continue;
+
+        const overlap = minDistance - distance;
+        const nx = dx / distance;
+        const ny = dy / distance;
+
+        if (a._state.sleeping) {
+          b._state.x += nx * overlap;
+          b._state.y += ny * overlap;
+          b._state.sleeping = false;
+          b._state.sleepFrames = 0;
+        } else if (b._state.sleeping) {
+          a._state.x -= nx * overlap;
+          a._state.y -= ny * overlap;
+          a._state.sleeping = false;
+          a._state.sleepFrames = 0;
+        } else {
+          a._state.x -= nx * overlap * 0.5;
+          a._state.y -= ny * overlap * 0.5;
+          b._state.x += nx * overlap * 0.5;
+          b._state.y += ny * overlap * 0.5;
+
+          const relativeVx = b._state.vx - a._state.vx;
+          const relativeVy = b._state.vy - a._state.vy;
+          const impulse = (relativeVx * nx + relativeVy * ny) * TAG_RESTITUTION;
+
+          if (Math.abs(impulse) < 1.5) continue;
+
+          a._state.sleeping = false;
+          a._state.sleepFrames = 0;
+          b._state.sleeping = false;
+          b._state.sleepFrames = 0;
+
+          a._state.vx += impulse * nx;
+          a._state.vy += impulse * ny;
+          b._state.vx -= impulse * nx;
+          b._state.vy -= impulse * ny;
+        }
+      }
+    }
+  }
+
+  function stepPhysics(dt) {
+    const bounds = getBounds();
+    const gravity = GRAVITY * scaleFactor();
+    let awakeCount = 0;
+
+    tags.forEach((tag) => {
+      if (tag.classList.contains('is-dragging')) {
+        awakeCount += 1;
+        return;
+      }
+
+      const state = tag._state;
+      ensureVelocity(state);
+
+      if (state.sleeping) return;
+
+      awakeCount += 1;
+      state.vy += gravity * dt;
+      state.x += state.vx * dt;
+      state.y += state.vy * dt;
+      state.rot += state.vr * dt;
+
+      state.vx *= DAMPING;
+      state.vy *= DAMPING;
+      state.vr *= 0.96;
+
+      resolveWallCollision(tag, bounds);
+      trySleepTag(tag, bounds);
+    });
+
+    if (awakeCount > 0) {
+      resolveTagCollisions();
+
+      tags.forEach((tag) => {
+        if (tag.classList.contains('is-dragging') || tag._state.sleeping) return;
+        resolveWallCollision(tag, bounds);
+        trySleepTag(tag, bounds);
+      });
+    }
+
+    tags.forEach(applyTransform);
+
+    if (selectedTag && !selectedTag.classList.contains('is-dragging')) {
+      positionInfoPanel(selectedTag);
+    }
+
+    if (awakeCount === 0) {
+      physicsActive = false;
+    }
+  }
+
+  function tickPhysics(now) {
+    if (gravityEnabled && physicsActive) {
+      const dt = Math.min((now - lastPhysicsTime) / 1000, 0.032);
+      if (dt > 0) stepPhysics(dt);
+      lastPhysicsTime = now;
+    }
+    requestAnimationFrame(tickPhysics);
+  }
+
+  function startPhysics() {
+    if (!gravityEnabled) return;
+    physicsActive = true;
+    lastPhysicsTime = performance.now();
+  }
+
   function runTagEntrance() {
     if (entranceDone || reducedMotion) return;
     entranceDone = true;
 
     const finals = tags.map((tag) => ({ ...tag._state }));
-    const s = scaleFactor();
 
     tags.forEach((tag, i) => {
       tag._state = {
-        x: (Math.random() - 0.5) * 120 * s,
-        y: (Math.random() - 0.5) * 100 * s,
+        ...finals[i],
+        x: (Math.random() - 0.5) * cloud.offsetWidth * 0.75,
+        y: -cloud.offsetHeight * 0.48,
         rot: finals[i].rot + (Math.random() - 0.5) * 24,
+        vx: (Math.random() - 0.5) * 40,
+        vy: 0,
+        vr: (Math.random() - 0.5) * 20,
       };
       tag.style.opacity = '0';
       tag.style.transition = 'none';
-      applyTransform(tag, i);
+      applyTransform(tag);
     });
 
     requestAnimationFrame(() => {
       cloud.classList.add('is-entered');
       tags.forEach((tag, i) => {
         const delay = i * 55;
-        tag.style.transition = `transform 0.75s cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms, opacity 0.45s ease ${delay}ms`;
-        tag._state = finals[i];
+        tag.style.transition = `opacity 0.45s ease ${delay}ms`;
         tag.style.opacity = '1';
-        applyTransform(tag, i);
       });
+
+      startPhysics();
+      wakeAllTags();
 
       window.setTimeout(() => {
         tags.forEach((tag) => {
           tag.style.transition = '';
         });
-      }, 1400);
+      }, 900);
     });
-  }
-
-  function tickFloat(now) {
-    if (floatEnabled) {
-      floatTick = now;
-      tags.forEach((tag, i) => {
-        if (!tag.classList.contains('is-dragging')) {
-          applyTransform(tag, i);
-        }
-      });
-    }
-    requestAnimationFrame(tickFloat);
   }
 
   function positionInfoPanel(tag) {
@@ -278,12 +524,19 @@ document.addEventListener('DOMContentLoaded', () => {
     activeTag.setPointerCapture(e.pointerId);
     activeTag.classList.add('is-dragging');
     activeTag.style.zIndex = String(++zTop);
+    wakeTag(activeTag);
+
+    ensureVelocity(activeTag._state);
+    activeTag._state.vx = 0;
+    activeTag._state.vy = 0;
 
     pointerStart = { x: e.clientX, y: e.clientY };
     didDrag = false;
 
     const local = pointerToLocal(e.clientX, e.clientY);
     const state = activeTag._state;
+    lastDragSample = { x: local.x, y: local.y, t: performance.now() };
+    dragVelocity = { x: 0, y: 0 };
 
     if (e.shiftKey) {
       dragMode = 'rotate';
@@ -312,8 +565,18 @@ document.addEventListener('DOMContentLoaded', () => {
       state.rot = rotateStart.rot + (angle - rotateStart.angle);
     } else {
       const local = pointerToLocal(e.clientX, e.clientY);
+      const now = performance.now();
+      const dt = (now - lastDragSample.t) / 1000;
+
+      if (dt > 0 && dt < 0.08) {
+        dragVelocity.x = (local.x - lastDragSample.x) / dt * 0.5;
+        dragVelocity.y = (local.y - lastDragSample.y) / dt * 0.5;
+      }
+
+      lastDragSample = { x: local.x, y: local.y, t: now };
       state.x = local.x - dragOffset.x;
       state.y = local.y - dragOffset.y;
+      clampStateToBounds(activeTag);
     }
 
     applyTransform(activeTag);
@@ -334,6 +597,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     clickedTag.classList.remove('is-dragging');
 
+    if (didDrag && gravityEnabled) {
+      ensureVelocity(clickedTag._state);
+      clickedTag._state.vx = dragVelocity.x;
+      clickedTag._state.vy = dragVelocity.y;
+      startPhysics();
+    }
+
     if (!didDrag) {
       showServiceInfo(clickedTag);
     }
@@ -345,8 +615,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function onWheel(e) {
     e.preventDefault();
     const tag = e.currentTarget;
+    ensureVelocity(tag._state);
     tag._state.rot += e.deltaY * 0.12;
+    tag._state.vr += e.deltaY * 0.02;
     tag.style.zIndex = String(++zTop);
+    wakeTag(tag);
     applyTransform(tag);
   }
 
@@ -355,8 +628,19 @@ document.addEventListener('DOMContentLoaded', () => {
     initTag(tag);
   });
   layoutTags();
+  cacheTagRadii();
 
-  if (!reducedMotion) {
+  const relayoutOnResize = () => {
+    cacheTagRadii();
+    tags.forEach((tag) => {
+      if (tag.classList.contains('is-dragging')) return;
+      clampStateToBounds(tag);
+      applyTransform(tag);
+    });
+    if (selectedTag) positionInfoPanel(selectedTag);
+  };
+
+  if (gravityEnabled) {
     const entranceObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -368,7 +652,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { threshold: 0.2 }
     );
     entranceObserver.observe(cloud);
-    requestAnimationFrame(tickFloat);
+    requestAnimationFrame(tickPhysics);
   } else {
     cloud.classList.add('is-entered');
   }
@@ -403,7 +687,10 @@ document.addEventListener('DOMContentLoaded', () => {
     resizeTimer = setTimeout(() => {
       const newWidth = cloud.offsetWidth;
       const ratio = newWidth / lastWidth;
-      if (Math.abs(ratio - 1) < 0.02) return;
+      if (Math.abs(ratio - 1) < 0.02) {
+        relayoutOnResize();
+        return;
+      }
 
       tags.forEach(tag => {
         tag._state.x *= ratio;
@@ -411,11 +698,8 @@ document.addEventListener('DOMContentLoaded', () => {
         applyTransform(tag);
       });
 
-      if (selectedTag) {
-        positionInfoPanel(selectedTag);
-      }
-
       lastWidth = newWidth;
+      relayoutOnResize();
     }, 150);
   });
 });

@@ -470,15 +470,19 @@ body.is-ready .hero-home__enter--cta {
    ============================================ */
 .services {
   padding: clamp(5.5rem, 11vw, 8rem) var(--space-x) var(--space-section);
+  overflow: visible;
 }
 
 .services__grid {
+  position: relative;
+  overflow: visible;
   --services-frame-h: clamp(260px, 42vw, 460px);
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-areas: "heading info";
   gap: var(--space-grid-lg) var(--space-section);
   align-items: start;
+  min-height: var(--services-frame-h);
 }
 
 .services__heading-block {
@@ -534,18 +538,23 @@ body.is-ready .hero-home__enter--cta {
   max-width: 380px;
 }
 
-/* Service Tags — playground interactivo */
+/* Service Tags — playground interactivo (cubre todo el bloque de servicios) */
 .tags-cloud {
-  grid-area: heading;
-  grid-column: 1 / -1;
-  position: relative;
-  z-index: 1;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
   width: 100%;
-  max-width: 720px;
-  min-height: clamp(260px, 36vw, 360px);
-  margin: calc(var(--services-frame-h) + 0.25rem) auto 0;
-  padding: clamp(0.5rem, 1vw, 0.75rem);
+  min-height: 100%;
+  padding: clamp(0.75rem, 1.5vw, 1.25rem);
   touch-action: none;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.tags-cloud__stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
 }
 
 .tag {
@@ -555,11 +564,12 @@ body.is-ready .hero-home__enter--cta {
   width: auto;
   height: auto;
   display: block;
-  max-height: 52px;
+  max-height: 40px;
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.12));
   cursor: grab;
   user-select: none;
   touch-action: none;
+  pointer-events: auto;
   will-change: transform;
   transition: filter 0.2s ease;
 }
@@ -574,14 +584,14 @@ body.is-ready .hero-home__enter--cta {
   filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.15));
 }
 
-.tag--apps       { max-height: 52px; z-index: 3; }
-.tag--foto       { max-height: 54px; z-index: 4; }
-.tag--ilustracion { max-height: 88px; z-index: 5; }
-.tag--editorial  { max-height: 82px; z-index: 2; }
-.tag--web        { max-height: 52px; z-index: 4; }
-.tag--animacion  { max-height: 52px; z-index: 3; }
-.tag--branding   { max-height: 52px; z-index: 6; }
-.tag--estrategia { max-height: 52px; z-index: 4; }
+.tag--apps       { max-height: 40px; z-index: 3; }
+.tag--foto       { max-height: 42px; z-index: 4; }
+.tag--ilustracion { max-height: 66px; z-index: 5; }
+.tag--editorial  { max-height: 62px; z-index: 2; }
+.tag--web        { max-height: 40px; z-index: 4; }
+.tag--animacion  { max-height: 40px; z-index: 3; }
+.tag--branding   { max-height: 40px; z-index: 6; }
+.tag--estrategia { max-height: 40px; z-index: 4; }
 
 .tag.is-selected {
   filter: drop-shadow(0 8px 18px rgba(227, 6, 19, 0.28)) drop-shadow(0 0 0 2px rgba(227, 6, 19, 0.45));
@@ -589,6 +599,10 @@ body.is-ready .hero-home__enter--cta {
 
 .tag.is-selected.is-pulse {
   animation: tagPulse 0.5s ease;
+}
+
+.tags-cloud.has-selection {
+  z-index: 5;
 }
 
 .tag-info {
@@ -603,7 +617,7 @@ body.is-ready .hero-home__enter--cta {
   border-radius: 14px;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
   text-align: center;
-  z-index: 30;
+  z-index: 40;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -636,10 +650,6 @@ body.is-ready .hero-home__enter--cta {
 .tag-info__close:hover {
   background: rgba(227, 6, 19, 0.08);
   color: var(--red);
-}
-
-.tags-cloud.has-selection {
-  z-index: 2;
 }
 
 .tags-cloud.has-selection .tag-info {
@@ -940,6 +950,10 @@ body.is-ready .hero-home__enter--cta {
 /* ============================================
    NOSOTROS
    ============================================ */
+#nosotros {
+  padding-top: clamp(5rem, 10vw, 7.5rem);
+}
+
 .about {
   padding: 0 var(--space-x) var(--space-block);
 }
@@ -1229,11 +1243,10 @@ body.is-ready .hero-home__enter--cta {
 }
 
 .portfolio-item__shell {
+  --card-radius: clamp(48px, 8vw, 72px);
   width: 100%;
-  display: flex;
-  flex-direction: column;
   position: relative;
-  border-radius: clamp(48px, 8vw, 72px);
+  border-radius: var(--card-radius);
   overflow: hidden;
   background: var(--red);
   box-shadow: 0 4px 0 rgba(221, 0, 0, 0.08);
@@ -1241,8 +1254,15 @@ body.is-ready .hero-home__enter--cta {
   outline: none;
   --tilt-x: 0deg;
   --tilt-y: 0deg;
+  transition: box-shadow 0.35s ease;
+}
+
+.portfolio-item__inner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
   transform: perspective(900px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
-  transition: transform 0.2s ease, box-shadow 0.35s ease;
+  transition: transform 0.2s ease;
 }
 
 .portfolio-item__shell:hover,
@@ -1257,6 +1277,7 @@ body.is-ready .hero-home__enter--cta {
   line-height: 0;
   flex: 1 1 auto;
   background: var(--cream);
+  border-radius: var(--card-radius) var(--card-radius) 0 0;
 }
 
 .portfolio-item__media-wrap::after {
@@ -1322,6 +1343,7 @@ body.is-ready .hero-home__enter--cta {
   transform: translateY(12px);
   transition: opacity 0.35s ease, transform 0.35s ease;
   pointer-events: none;
+  border-radius: inherit;
 }
 
 .portfolio-item__shell:hover .portfolio-item__overlay,
@@ -1368,6 +1390,7 @@ body.is-ready .hero-home__enter--cta {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  border-radius: 0 0 var(--card-radius) var(--card-radius);
 }
 
 .portfolio-item__name {
@@ -1715,7 +1738,7 @@ body.is-ready .hero-home__enter--cta {
     transform: none;
   }
 
-  .portfolio-item__shell {
+  .portfolio-item__inner {
     transform: none;
   }
 
@@ -1759,15 +1782,12 @@ body.is-ready .hero-home__enter--cta {
     padding: var(--space-block) 0 0;
   }
 
-  .tags-cloud {
-    margin-top: var(--space-stack);
-    align-self: center;
-    width: 100%;
-    min-height: 300px;
+  .services__grid {
+    min-height: clamp(420px, 72vw, 520px);
   }
 
-  .tag--ilustracion { max-height: 72px; }
-  .tag--editorial   { max-height: 68px; }
+  .tag--ilustracion { max-height: 54px; }
+  .tag--editorial   { max-height: 50px; }
 
   .team {
     overflow: visible;
@@ -1906,10 +1926,6 @@ body.is-ready .hero-home__enter--cta {
 
   .logo--header img {
     height: var(--logo-img-h);
-  }
-
-  .tags-cloud {
-    min-height: 260px;
   }
 
   .team__bg-text {
