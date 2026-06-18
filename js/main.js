@@ -47,6 +47,67 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  const sections = [
+    { id: 'inicio', el: document.getElementById('inicio') },
+    { id: 'servicios', el: document.getElementById('servicios') },
+    { id: 'nosotros', el: document.getElementById('nosotros') },
+    { id: 'portafolio', el: document.getElementById('portafolio') },
+    { id: 'contacto', el: document.getElementById('contacto') },
+  ].filter(section => section.el);
+
+  function getHeaderOffset() {
+    const anchor = document.getElementById('servicios') || document.getElementById('inicio');
+    if (anchor) {
+      const margin = parseFloat(getComputedStyle(anchor).scrollMarginTop);
+      if (!Number.isNaN(margin) && margin > 0) return margin;
+    }
+    const header = document.querySelector('.header');
+    return header ? header.getBoundingClientRect().height : 80;
+  }
+
+  function setActiveNav(id) {
+    const sectionChanged = activeSectionId !== null && activeSectionId !== id;
+    activeSectionId = id;
+
+    navLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      const isActive = href === `#${id}`;
+      link.classList.toggle('nav__link--active', isActive);
+      if (isActive && sectionChanged) {
+        flashNavSelection(link);
+      }
+    });
+  }
+
+  function updateActiveSection() {
+    const offset = getHeaderOffset();
+    const probe = offset + 8;
+    let current = sections[0].id;
+
+    sections.forEach(({ id, el }) => {
+      if (el.getBoundingClientRect().top <= probe) {
+        current = id;
+      }
+    });
+
+    const nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+    if (nearBottom) {
+      current = sections[sections.length - 1].id;
+    }
+
+    setActiveNav(current);
+  }
+
+  let scrollTicking = false;
+  function onScrollSpy() {
+    if (scrollTicking) return;
+    scrollTicking = true;
+    requestAnimationFrame(() => {
+      updateActiveSection();
+      scrollTicking = false;
+    });
+  }
+
   if (toggle && nav) {
     toggle.addEventListener('click', () => {
       toggle.classList.toggle('is-open');
@@ -54,9 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function getScrollOffset() {
-      const anchor = document.getElementById('servicios') || document.getElementById('inicio');
-      if (!anchor) return 72;
-      return parseFloat(getComputedStyle(anchor).scrollMarginTop) || 72;
+      return getHeaderOffset();
     }
 
     function scrollToSection(id) {
@@ -85,6 +144,10 @@ document.addEventListener('DOMContentLoaded', () => {
           return;
         }
 
+        if (href?.startsWith('#')) {
+          setActiveNav(href.slice(1));
+        }
+
         pulseElement(link);
         flashNavSelection(link);
         toggle.classList.remove('is-open');
@@ -93,44 +156,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  const sections = [
-    { id: 'inicio', el: document.getElementById('inicio') },
-    { id: 'servicios', el: document.getElementById('servicios') },
-    { id: 'nosotros', el: document.getElementById('nosotros') },
-    { id: 'portafolio', el: document.getElementById('portafolio') },
-    { id: 'contacto', el: document.getElementById('contacto') },
-  ].filter(section => section.el);
-
-  function setActiveNav(id) {
-    const sectionChanged = activeSectionId !== null && activeSectionId !== id;
-    activeSectionId = id;
-
-    navLinks.forEach(link => {
-      const href = link.getAttribute('href');
-      const isActive = href === `#${id}`;
-      link.classList.toggle('nav__link--active', isActive);
-      if (isActive && sectionChanged) {
-        flashNavSelection(link);
-      }
-    });
-  }
-
-  function updateActiveSection() {
-    const offset = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h'), 10) || 80;
-    const scrollPos = window.scrollY + offset + 80;
-    let current = sections[0].id;
-
-    sections.forEach(({ id, el }) => {
-      if (el.offsetTop <= scrollPos) {
-        current = id;
-      }
-    });
-
-    setActiveNav(current);
-  }
-
   if (sections.length && navLinks.length) {
-    window.addEventListener('scroll', updateActiveSection, { passive: true });
+    window.addEventListener('scroll', onScrollSpy, { passive: true });
+    window.addEventListener('resize', onScrollSpy, { passive: true });
+    window.addEventListener('hashchange', updateActiveSection);
+    window.addEventListener('rudo:ready', updateActiveSection);
+    window.addEventListener('load', updateActiveSection);
     updateActiveSection();
   }
 
