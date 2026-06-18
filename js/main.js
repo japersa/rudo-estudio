@@ -191,4 +191,30 @@ document.addEventListener('DOMContentLoaded', () => {
       closePortfolioItems();
     }
   });
+
+  const backToTop = document.getElementById('back-to-top');
+  if (backToTop) {
+    const backToTopThreshold = 320;
+
+    function updateBackToTop() {
+      const show = window.scrollY > backToTopThreshold;
+      backToTop.classList.toggle('is-visible', show);
+      backToTop.setAttribute('aria-hidden', show ? 'false' : 'true');
+      backToTop.tabIndex = show ? 0 : -1;
+    }
+
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: reducedMotion ? 'auto' : 'smooth',
+      });
+      history.pushState(null, '', '#inicio');
+      setActiveNav('inicio');
+      toggle?.classList.remove('is-open');
+      nav?.classList.remove('is-open');
+    });
+
+    window.addEventListener('scroll', updateBackToTop, { passive: true });
+    updateBackToTop();
+  }
 });
