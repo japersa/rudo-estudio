@@ -1,0 +1,21 @@
+{
+  "name": "Rudo Estudio",
+  "short_name": "Rudo",
+  "description": "Estudio creativo en Cartagena. Branding, diseño web, fotografía y animación.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#fdf2e9",
+  "theme_color": "#e30613",
+  "icons": [
+    {
+      "src": "assets/logo-red.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
