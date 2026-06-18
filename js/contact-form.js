@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('contact-form');
   if (!form) return;
 
-  const WHATSAPP_NUMBER = '573053300803';
+  const WHATSAPP_NUMBER = '573053300303';
   const submitBtn = form.querySelector('.contact-form__submit');
 
   const fields = {

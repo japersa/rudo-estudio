@@ -30,6 +30,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  document.querySelectorAll('.footer__social-links a').forEach((link) => {
+    link.addEventListener('click', () => pulseElement(link));
+    link.addEventListener('animationend', (e) => {
+      if (e.animationName === 'socialPulse') {
+        link.classList.remove('is-pulse');
+      }
+    });
+  });
+
   navLinks.forEach((link) => {
     link.addEventListener('animationend', (e) => {
       if (e.animationName === 'navPulse') {
