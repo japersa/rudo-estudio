@@ -1,7 +1,7 @@
 (function () {
   const preloader = document.getElementById('preloader');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const MIN_MS = reducedMotion ? 0 : 1000;
+  const MIN_MS = reducedMotion ? 0 : 400;
   const MAX_MS = 6000;
   const start = performance.now();
   let finished = false;
